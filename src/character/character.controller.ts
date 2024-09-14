@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { CharacterService } from './character.service';
+import { CreateCharacterDto } from 'src/dto/CreateCharacter.dto';
 
 @Controller('people')
 export class CharacterController {
@@ -11,7 +12,11 @@ export class CharacterController {
   }
 
   @Get(':id')
-  getCharacterById(@Param('id') characterId: string) {
-    return this.characterService.getCharacterById(characterId);
+  getCharacterById(
+    @Param('id') characterId: string,
+    @Body() createCharacterDto: CreateCharacterDto,
+  ) {
+    //this.characterService.createCharacter(createCharacterDto);
+    return this.characterService.getCharacterById(characterId, createCharacterDto);
   }
 }
