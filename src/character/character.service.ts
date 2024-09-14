@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AxiosResponse } from 'axios';
 import { response } from 'express';
@@ -65,7 +65,6 @@ export class CharacterService {
     }
 
     getCharacterById(characterId: string, createCharacterDto: CreateCharacterDto) {
-
         // try to find a character in db
         const el = this.characterRepository.findOneBy( {id: parseInt(characterId)} )
             .then((characterFromDB) => {
@@ -109,14 +108,11 @@ export class CharacterService {
                 const {id, ...characterDataDB} = characterFromDB;
                 return characterDataDB;
             })
-            .catch((error) => {
-                return error.data;
-            })
+            .catch(error => {
+                console.error('Error finding entity:', error);
+                throw new InternalServerErrorException('An error occurred while retrieving the entity');
+            });
 
         return el;
-    }
-
-    createCharacter(characterDetails: CreateCharacterParams) {
-        
     }
 }
