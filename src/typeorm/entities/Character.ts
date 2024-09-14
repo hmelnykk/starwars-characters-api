@@ -23,13 +23,13 @@ export class Character {
     @Column()
     homeworld: string
     @Column('json')
-    films: string[] // should be an array or another connected table 'Films'
+    films: string[]
     @Column('json')
-    species: any[] // same as in line 26
+    species: any[]
     @Column('json')
-    vehicles: string[] // same...
+    vehicles: string[]
     @Column('json')
-    starships: string[] // u got it
+    starships: string[]
     @Column()
     created: string
     @Column()

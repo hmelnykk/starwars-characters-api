@@ -15,7 +15,6 @@ import { Character } from './typeorm/entities/Character';
     database: 'sw_characters_api',
     entities: [Character],
     synchronize: true,
-
   })],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-export type CreateCharacterParams = {
+export class CreateCharacterDto {
     id: number;
     name: string;
     height: string;
