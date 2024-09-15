@@ -9,16 +9,14 @@ export class CharacterController {
   @Get()
   getCharacterList(
     @Query('page') page = 1,
-    @Body() createCharacterDto: CreateCharacterDto,
   ) {
-    return this.characterService.getCharacterList(page, createCharacterDto);
+    return this.characterService.getCharacterList(page);
   }
 
   @Get(':id')
   getCharacterById(
     @Param('id') characterId: string,
-    @Body() createCharacterDto: CreateCharacterDto,
   ) {
-    return this.characterService.getCharacterById(characterId, createCharacterDto);
+    return this.characterService.getCharacterById(characterId);
   }
 }

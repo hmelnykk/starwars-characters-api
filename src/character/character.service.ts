@@ -2,11 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AxiosResponse } from 'axios';
-import { response } from 'express';
-import { map } from 'rxjs';
-import { CreateCharacterDto } from 'src/dtos/CreateCharacter.dto';
+import { catchError, map, throwError } from 'rxjs';
 import { Character } from 'src/typeorm/entities/Character';
-import { CreateCharacterParams } from 'src/utils/types';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,7 +13,7 @@ export class CharacterService {
         @InjectRepository(Character) private characterRepository: Repository<Character>,
     ) {}
 
-    getCharacterList(page: number, createCharacterDto: CreateCharacterDto) {
+    getCharacterList(page: number) {
         const url = 'https://swapi.dev/api/people/?page=' + page;
 
         const http_result = this.httpService.get(url)
@@ -59,12 +56,17 @@ export class CharacterService {
                 });
 
                 return {total, data};
-            }))
+            }),
+            catchError(error => {
+                let http_error = throwError(() => new Error('Oops! Something went wrong!'));
+                return http_error;
+            })
+            )
 
         return http_result;
     }
 
-    getCharacterById(characterId: string, createCharacterDto: CreateCharacterDto) {
+    getCharacterById(characterId: string) {
         // try to find a character in db
         const el = this.characterRepository.findOneBy( {id: parseInt(characterId)} )
             .then((characterFromDB) => {
